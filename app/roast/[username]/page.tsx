@@ -11,7 +11,26 @@ export default async function RoastPage({ params }: { params: Promise<{ username
   
   const user = await getUser(username);
   if (!user) {
-    notFound();
+    return (
+      <div className="min-h-screen flex flex-col p-6 max-w-2xl mx-auto w-full pt-32 text-center">
+        <div className="mb-12">
+          <div className="text-display text-[8rem] text-error opacity-20 leading-none mb-4">404</div>
+          <h1 className="text-display text-4xl mb-6 text-accent">Skill Issue Detected.</h1>
+          <p className="text-xl opacity-70 font-display mb-8">
+            You can't even type a GitHub username correctly. Are you sure you're a developer? 
+            We couldn't find <span className="text-error">@{username}</span>. 
+          </p>
+          <div className="p-6 border border-foreground/10 bg-paper-2 text-left space-y-4">
+            <p className="text-foreground/50 font-display text-sm uppercase tracking-widest border-b border-foreground/10 pb-2">Automated Assessment</p>
+            <p className="text-lg">"Fails at basic data entry. Probably pushes to main without testing."</p>
+            <p className="text-lg">"Copy-pasting is a core dev skill, yet here we are."</p>
+          </div>
+        </div>
+        <Link href="/" className="inline-block border border-accent text-accent px-8 py-4 font-display uppercase tracking-widest hover:bg-accent hover:text-background transition-colors duration-dur-base">
+          Try Again (Slowly This Time)
+        </Link>
+      </div>
+    );
   }
 
   const repos = await getRepos(username);
