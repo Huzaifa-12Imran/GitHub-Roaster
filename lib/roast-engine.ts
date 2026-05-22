@@ -78,7 +78,8 @@ export function generateRoast(
       }
     });
   });
-  const naming = totalMsgs === 0 ? 50 : 100 - (badMsgs / totalMsgs * 100);
+  // If no commits fetched (e.g. repos have no recent history), assume moderate laziness
+  const naming = totalMsgs === 0 ? 35 : Math.max(10, 100 - (badMsgs / totalMsgs * 100));
 
   // Hygiene: open issues on old repos, 'test' in name
   const abandoned = repos.filter(r => r.open_issues_count > 0 && new Date(r.pushed_at).getTime() < Date.now() - 31536000000).length;
@@ -120,7 +121,9 @@ export function generateRoast(
     
     testing = Math.min(100, 20 + (reposWithTests / packageJsons.length) * 80);
   } else if (testNames > 0) {
-     testing = 30; // Fallback if no package.json
+    testing = 25; // Fallback if no package.json but has test-named repos
+  } else {
+    testing = 10; // No package.json found at all — very likely untested
   }
 
   const scores = {

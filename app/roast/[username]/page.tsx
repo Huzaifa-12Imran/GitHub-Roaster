@@ -81,11 +81,17 @@ export default async function RoastPage({ params }: { params: Promise<{ username
         <div className="space-y-12">
           <h2 className="font-display tracking-widest text-sm uppercase opacity-50 mb-8 border-b border-foreground/10 pb-4">The Verdict</h2>
           <div className="space-y-8 text-lg text-foreground/80">
-            <p>"{result.lines.consistency}"</p>
-            <p>"{result.lines.documentation}"</p>
-            <p>"{result.lines.testing}"</p>
-            <p>"{result.lines.hygiene}"</p>
-            <p className="text-accent">"{result.lines.naming}"</p>
+            {/* Dynamically pick the 4 worst-scoring categories so every profile gets a unique verdict */}
+            {(Object.entries(result.scores) as [string, number][])
+              .filter(([key]) => key !== "overall")
+              .sort(([, a], [, b]) => a - b)
+              .slice(0, 4)
+              .map(([key], i) => (
+                <p key={key} className={i === 3 ? "text-accent" : ""}>
+                  "{result.lines[key as keyof typeof result.lines]}"
+                </p>
+              ))
+            }
           </div>
 
           <div className="mt-16 pt-8 border-t border-foreground/10">
