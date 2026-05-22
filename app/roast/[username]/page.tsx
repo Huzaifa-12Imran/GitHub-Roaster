@@ -91,11 +91,23 @@ export default async function RoastPage({ params }: { params: Promise<{ username
 
           <div className="mt-16 pt-8 border-t border-foreground/10">
             <h3 className="font-display tracking-widest text-xs uppercase opacity-30 mb-4">Silver Linings</h3>
-            <ul className="text-sm opacity-60 space-y-2 list-disc list-inside">
+            <ul className="text-sm opacity-60 space-y-2 list-disc list-inside mb-12">
               {result.compliments.map((c, i) => (
                 <li key={i}>{c}</li>
               ))}
             </ul>
+
+            <h3 className="font-display tracking-widest text-xs uppercase opacity-30 mb-4">Algorithmic Weights</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-y-2 gap-x-4 text-xs font-display text-foreground/40 bg-paper-2 p-4 border border-foreground/10">
+              <div>Consistency: 20%</div>
+              <div>Testing: 20%</div>
+              <div>Documentation: 15%</div>
+              <div>Hygiene: 15%</div>
+              <div>Naming: 10%</div>
+              <div>Originality: 10%</div>
+              <div>Diversity: 5%</div>
+              <div>Social: 5%</div>
+            </div>
           </div>
         </div>
       </main>
