@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import { getUser, getRepos, getEvents, getCommits, getReadme, getPackageJson } from "@/lib/github";
 import { generateRoast } from "@/lib/roast-engine";
 import Link from "next/link";

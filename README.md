@@ -1,6 +1,4 @@
-# github-roast
-
-![Demo](https://via.placeholder.com/800x450.gif?text=Terminal+Roasting+GIF)
+> A brutal, purely algorithmic assessment of your GitHub profile. No database, no LLM API, no paid anything. Just your raw public data exposed.
 
 A brutal, purely algorithmic assessment of your GitHub profile. No database, no LLM API, no paid anything. Just your raw public data exposed.
 

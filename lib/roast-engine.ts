@@ -178,6 +178,20 @@ export function generateRoast(
       compliments[Math.floor(Math.random() * compliments.length)],
       compliments[Math.floor(Math.random() * compliments.length)]
     ].filter((v, i, a) => a.indexOf(v) === i), // dedupe
-    killerLine: getLineForScore("consistency", scores.consistency) // Just a default killer line
+    killerLine: (() => {
+      // Pick the line from the worst-scoring category for maximum impact
+      const categoryScores: [keyof typeof scores, number][] = [
+        ["consistency", scores.consistency],
+        ["documentation", scores.documentation],
+        ["testing", scores.testing],
+        ["hygiene", scores.hygiene],
+        ["naming", scores.naming],
+        ["diversity", scores.diversity],
+        ["social", scores.social],
+        ["originality", scores.originality],
+      ];
+      const worst = categoryScores.reduce((min, cur) => cur[1] < min[1] ? cur : min);
+      return getLineForScore(worst[0] as keyof typeof roastLines, worst[1]);
+    })()
   };
 }
