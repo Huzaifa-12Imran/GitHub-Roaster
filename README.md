@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# github-roast
 
-## Getting Started
+![Demo](https://via.placeholder.com/800x450.gif?text=Terminal+Roasting+GIF)
 
-First, run the development server:
+A brutal, purely algorithmic assessment of your GitHub profile. No database, no LLM API, no paid anything. Just your raw public data exposed.
+
+## Install and Usage
+
+Clone the repo, install the dependencies, and run it locally.
 
 ```bash
+git clone https://github.com/yourname/github-roast.git
+cd github-roast
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+If you want higher rate limits (5000 req/hr instead of 60), create a `.env.local` file and add your GitHub token:
+```env
+GITHUB_TOKEN=ghp_your_token_here
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Example Output
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```text
+Grade: D
+Score: 41/100
 
-## Learn More
+"Your README has fewer words than this sentence."
+"12 open issues. 0 comments. A graveyard of good intentions."
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Roast Badge
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Once you get your roast, embed your grade permanently in your GitHub profile `README.md` to show off your resilience:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```markdown
+[![Roast Grade](https://github-roaster.vercel.app/badge/yourusername)](https://github-roaster.vercel.app/roast/yourusername)
+```
 
-## Deploy on Vercel
+This will render a dynamically generated SVG badge reflecting your grade.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Hall of Shame
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+We keep a persistent leaderboard of the lowest-scoring public roasts at `/hall-of-shame`. It's stored in `data/shame.json`. Every week, a GitHub Action runs to tweet the most brutally roasted profile. 
+
+## Contributing
+
+Think you can write a better roast line? We welcome additions to the scoring logic! 
+1. Open `lib/roast-lines.ts`
+2. Add your most savage line to the appropriate category bin (0-19 is the lowest).
+3. Submit a PR.
+
+Turn your users into contributors, which drives PRs and keeps you active on Rankistan.

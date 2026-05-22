@@ -1,0 +1,34 @@
+name: Weekly Most Roasted Tweet
+
+on:
+  schedule:
+    - cron: "0 12 * * 5" # Every Friday at 12:00 UTC
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  tweet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Fetch worst score from API
+        id: shame
+        run: |
+          WORST=$(curl -s https://github-roaster.vercel.app/api/shame/worst)
+          USERNAME=$(echo $WORST | jq -r '.username')
+          GRADE=$(echo $WORST | jq -r '.grade')
+          LINE=$(echo $WORST | jq -r '.killerLine')
+          echo "username=$USERNAME" >> $GITHUB_OUTPUT
+          echo "grade=$GRADE" >> $GITHUB_OUTPUT
+          echo "line=$LINE" >> $GITHUB_OUTPUT
+
+      - name: Post to Twitter/X
+        uses: chuhlomin/twitter-action@v1.0.0
+        with:
+          status: "🏆 This week's most roasted GitHub profile: @${{ steps.shame.outputs.username }}\n\nGrade: ${{ steps.shame.outputs.grade }}\n\"${{ steps.shame.outputs.line }}\"\n\nRoast yours at https://github-roaster.vercel.app"
+        env:
+          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+          TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
+          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
