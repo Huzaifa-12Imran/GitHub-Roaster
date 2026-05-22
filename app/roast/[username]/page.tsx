@@ -1,5 +1,6 @@
 import { getUser, getRepos, getEvents, getCommits, getReadme, getPackageJson } from "@/lib/github";
 import { generateRoast } from "@/lib/roast-engine";
+import { maybeAddToShame } from "@/lib/redis";
 import Link from "next/link";
 import { ShareButtons } from "@/components/ShareButtons";
 import { ScoreBar } from "@/components/ScoreBar";
@@ -43,6 +44,17 @@ export default async function RoastPage({ params }: { params: Promise<{ username
   ]);
 
   const result = generateRoast(user, repos, events, readmes, commits, packageJsons);
+
+  // Write D/F grades to Hall of Shame — fire and forget, never blocks rendering
+  if (result.grade === "D" || result.grade === "F") {
+    maybeAddToShame({
+      username: result.username,
+      grade: result.grade,
+      overall: result.scores.overall,
+      killerLine: result.killerLine,
+      date: new Date().toISOString()
+    }).catch(() => {}); // silent fail if Redis not configured locally
+  }
 
   return (
     <div className="min-h-screen flex flex-col p-6 max-w-4xl mx-auto w-full pt-16 sm:pt-32">
