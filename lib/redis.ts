@@ -6,13 +6,14 @@ let _redis: Redis | null = null;
 export function getRedis(): Redis {
   if (_redis) return _redis;
 
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  // Vercel sometimes injects KV_REST_API_URL depending on the exact integration path used
+  const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
 
   if (!url || !token) {
     throw new Error(
-      "Missing UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN env vars. " +
-        "Create a free Upstash database and add them to .env.local"
+      "Missing UPSTASH_REDIS_REST_URL or KV_REST_API_URL env vars. " +
+        "Check your Vercel Environment Variables tab."
     );
   }
 
