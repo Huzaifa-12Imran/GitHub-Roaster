@@ -83,7 +83,12 @@ export function generateRoast(
   // Hygiene: open issues on old repos, 'test' in name
   const abandoned = repos.filter(r => r.open_issues_count > 0 && new Date(r.pushed_at).getTime() < Date.now() - 31536000000).length;
   const testNames = repos.filter(r => r.name.toLowerCase().includes("test") || r.name.toLowerCase().includes("untitled")).length;
-  let hygiene = 100 - (abandoned * 10) - (testNames * 15);
+  
+  // Use ratios instead of absolute counts because users with 500+ repos auto-fail otherwise
+  const abandonedRatio = repos.length > 0 ? abandoned / repos.length : 0;
+  const testRatio = repos.length > 0 ? testNames / repos.length : 0;
+  
+  let hygiene = 100 - (abandonedRatio * 200) - (testRatio * 200);
   if (hygiene < 0) hygiene = 10;
 
   // Diversity: languages
