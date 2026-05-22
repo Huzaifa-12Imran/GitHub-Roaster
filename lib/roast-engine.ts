@@ -148,7 +148,17 @@ export function generateRoast(
     originality: 0.10,
   };
 
-  const overall = Object.entries(weights).reduce((sum, [key, w]) => sum + scores[key as keyof typeof scores] * w, 0);
+  let overall = Object.entries(weights).reduce((sum, [key, w]) => sum + scores[key as keyof typeof scores] * w, 0);
+
+  // Core failure penalty: if a developer barely commits AND has no tests,
+  // good documentation alone can't save them. Apply a 0.78x multiplier.
+  if (scores.consistency < 30 && scores.testing < 30) {
+    overall *= 0.78;
+  }
+  // Single core failure: one of the two is bad but not both
+  else if (scores.consistency < 20 || scores.testing < 20) {
+    overall *= 0.90;
+  }
 
   const overallScore = Math.round(overall);
 
